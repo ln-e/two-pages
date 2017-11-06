@@ -1,0 +1,7 @@
+<div *ngIf="user">
+  <h1>Hello {{ user.displayName }}!</h1>
+  <button (click)="logout()">Logout</button>
+</div>
+<ng-template #showLogin>
+  <p>Please login.</p>
+</ng-template>

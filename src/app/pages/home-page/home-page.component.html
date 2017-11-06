@@ -1,0 +1,16 @@
+
+Available rooms:
+<ul>
+  <ng-container *ngIf="rooms">
+    <li class="text" *ngFor="let room of rooms">
+      {{ room | json }}
+      {{ room.name }} <button [routerLink]="['room', room.id]">go into</button>
+    </li>
+  </ng-container>
+  <li *ngIf="!rooms || !rooms.length">No available rooms</li>
+</ul>
+
+<form [formGroup]="newRoomForm">
+  <input formControlName="name"/>
+  <button (click)="addRoom()">Add room</button>
+</form>
