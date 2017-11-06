@@ -27,7 +27,7 @@ export class RoomPageComponent implements OnInit {
       )
       .subscribe((room: Room) => {
         this.room = room;
-      })
+      });
   }
 
 }

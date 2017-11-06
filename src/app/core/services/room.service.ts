@@ -30,10 +30,10 @@ export class RoomService {
   }
 
   public getRoom(id: string): Observable<Room> {
-    let roomDoc = this.db.doc<Room>('rooms/' + id);
+    const roomDoc = this.db.doc<Room>('rooms/' + id);
 
     return roomDoc.valueChanges().pipe(
-      map((data) => { return { id, ...data } }),
+      map((data) => ({ id, ...data })),
     );
   }
 
