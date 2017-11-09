@@ -1,0 +1,15 @@
+<div class="wrapper" #wrapper>
+  <canvas #canvasCommon class="canvas-common"></canvas>
+  <canvas #canvasOverlay class="canvas-overlay"
+          (mousedown)="overlayMouseDown($event)"
+          (mousemove)="overlayMouseMove($event)"
+          (mouseup)="overlayMouseUp($event)"></canvas>
+</div>
+
+<button (click)="clear()">Очистить</button>
+<button (click)="prev()">&lt;</button>
+<button (click)="next()">&gt;</button>
+
+<input type="number" [(ngModel)]="brush.width"/>
+<input type="color" [(ngModel)]="brush.color"/>
+<input type="slider" [(ngModel)]="brush.opacity"/>

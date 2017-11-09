@@ -14,6 +14,7 @@ import { NavbarComponent } from './component/navbar/navbar.component';
 import { LoginComponent } from './pages/login/login.component';
 import { FormsModule, ReactiveFormsModule } from '@angular/forms';
 import { RoomPageComponent } from './pages/room-page/room-page.component';
+import { GraffityComponent } from './component/graffity/graffity.component';
 
 @NgModule({
   declarations: [
@@ -22,6 +23,7 @@ import { RoomPageComponent } from './pages/room-page/room-page.component';
     NavbarComponent,
     LoginComponent,
     RoomPageComponent,
+    GraffityComponent,
   ],
   imports: [
     BrowserModule.withServerTransition({appId: 'two-pages-id'}),
