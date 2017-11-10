@@ -44,7 +44,7 @@ export class RoomService {
   }
 
   public getRoomCurves(roomId: string): Observable<Curve[]> {
-    return this.roomCollection.doc(roomId).collection<RoomData>('curves')
+    return this.roomCollection.doc(roomId).collection<RoomData>('curves', (ref) => ref.orderBy('now'))
       .snapshotChanges().pipe(
         map(actions => {
           return actions.map(a => {
@@ -57,7 +57,7 @@ export class RoomService {
   }
 
   public addRoomCurves(roomId: string, curve: Curve): Promise<firebase.firestore.DocumentReference> {
-    return this.roomCollection.doc(roomId).collection<RoomData>('curves').add({curve: curve.toJson()} as RoomData);
+    return this.roomCollection.doc(roomId).collection<RoomData>('curves').add({curve: curve.toJson(), now: new Date().getTime()} as RoomData);
   }
 
   public clearRoomCurves(roomId: string) {
@@ -95,11 +95,7 @@ export class RoomService {
         return;
       }
 
-      // Recurse on the next process tick, to avoid
-      // exploding the stack.
-      setTimeout(() => {
-        this.deleteQueryBatch(query, batchSize, resolve, reject);
-      });
+      this.deleteQueryBatch(query, batchSize, resolve, reject);
     })
       .catch(reject);
   }

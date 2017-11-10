@@ -1,15 +1,17 @@
 
 Available rooms:
-<ul>
+<mat-list>
   <ng-container *ngIf="rooms">
-    <li class="text" *ngFor="let room of rooms">
-      {{ room.name }} <button [routerLink]="['room', room.id]">go into</button>
-    </li>
+    <mat-list-item *ngFor="let room of rooms">
+      {{ room.name }} <button [routerLink]="['room', room.id]" mat-button>go into</button>
+    </mat-list-item>
   </ng-container>
-  <li *ngIf="!rooms || !rooms.length">No available rooms</li>
-</ul>
+  <mat-list-item *ngIf="!rooms || !rooms.length">No available rooms</mat-list-item>
+</mat-list>
 
 <form [formGroup]="newRoomForm">
-  <input formControlName="name" placeholder="Room's name"/>
-  <button (click)="addRoom()">Add room</button>
+  <mat-form-field>
+    <input formControlName="name" type="text" placeholder="Room's name" matInput/>
+  </mat-form-field>
+  <button (click)="addRoom()" mat-raised-button>Add room</button>
 </form>
