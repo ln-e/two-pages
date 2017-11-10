@@ -1,8 +1,9 @@
-import { Component, ElementRef, HostListener, OnInit, ViewChild } from '@angular/core';
+import { Component, ElementRef, HostListener, Input, OnInit, ViewChild } from '@angular/core';
 import { Brush } from '../../core/model/graffity/brush';
 import { Canvas } from '../../core/model/graffity/canvas';
 import { Curve } from '../../core/model/graffity/curve';
 import { Point } from '../../core/model/graffity/point';
+import { RoomService } from '../../core/services/room.service';
 
 @Component({
   selector: 'app-graffity',
@@ -13,21 +14,32 @@ export class GraffityComponent implements OnInit {
   @ViewChild('canvasCommon') public canvasCommonEl: ElementRef;
   @ViewChild('canvasOverlay') public canvasOverlayEl: ElementRef;
 
+  @Input() public roomId: string;
   public brush: Brush;
   public canvasCommon: Canvas;
   public canvasOverlay: Canvas;
   public curve: Curve;
   public curves: Curve[] = [];
   public inProcess = false;
-  public historyIndex = -1;
+  // public historyIndex = -1;
 
   constructor(
+    private roomService: RoomService,
   ) { }
 
   public ngOnInit() {
     this.brush = new Brush(40, '#c8c832', 0.75);
     this.canvasCommon = new Canvas(this.canvasCommonEl.nativeElement);
     this.canvasOverlay = new Canvas(this.canvasOverlayEl.nativeElement);
+    this.roomService.getRoomCurves(this.roomId)
+      .subscribe((curves: Curve[]) => {
+        // TODO сравнить с локальным списком чтобы не перересовывать весь канвас?
+        this.curves = curves;
+        this.canvasCommon.clear();
+        this.curves.forEach((curve: Curve) => {
+          this.canvasCommon.draw(curve);
+        });
+      });
   }
 
   public overlayMouseDown(e) {
@@ -50,18 +62,19 @@ export class GraffityComponent implements OnInit {
       this.canvasOverlay.clear();
       this.canvasCommon.draw(this.curve);
 
-      this.historyIndex += 1;
-      this.curves = this.curves.slice(0, this.historyIndex);
+      // this.historyIndex += 1;
+      // this.curves = this.curves.slice(0, this.historyIndex);
 
       this.curve.optimize(); // сокращаем количество ненужных точек
-      this.curves.push(this.curve);
+      this.roomService.addRoomCurves(this.roomId, this.curve);
+      // this.curves.push(this.curve);
       this.curve = undefined;
     }
   }
 
   private proceedCurveByEvent(e) {
     if (e) {
-      let offset = this.offset(this.canvasOverlay.root);
+      const offset = this.offset(this.canvasOverlay.root);
 
       this.curve.push(new Point(
         e.pageX - offset.left,
@@ -73,15 +86,6 @@ export class GraffityComponent implements OnInit {
     this.canvasOverlay.draw(this.curve);
   }
 
-  private offset(elt) {
-    const rect = elt.getBoundingClientRect(), bodyElt = document.body;
-
-    return {
-      top: rect.top + bodyElt .scrollTop,
-      left: rect.left + bodyElt .scrollLeft
-    };
-  }
-
   @HostListener('window:mouseup', ['$event'])
   public documentClick(event) {
     if (this.inProcess) {
@@ -90,9 +94,9 @@ export class GraffityComponent implements OnInit {
   }
 
   public clear() {
-    this.canvasCommon.clear();
-    this.historyIndex = -1;
-    this.curves = [];
+    // this.canvasCommon.clear();
+    // this.historyIndex = -1;
+    this.roomService.clearRoomCurves(this.roomId);
   }
 
   public data(): string {
@@ -107,11 +111,12 @@ export class GraffityComponent implements OnInit {
     return JSON.stringify(this.curves.map((curve: Curve) => {
       return {
         brush: curve.brush,
-        points: curve.points.map((point: Point) => point.asString()),
+        points: curve.points.map((point: Point) => point.toJson()),
       };
     }));
   }
 
+  /*
   public prev() {
     this.canvasCommon.clear();
     this.historyIndex = Math.max(this.historyIndex - 1, -1);
@@ -129,8 +134,14 @@ export class GraffityComponent implements OnInit {
       this.canvasCommon.draw(this.curves[i]);
     }
   }
+  */
 
-  public setBrush(brush: Brush) {
-    this.brush = brush;
+  private offset(elt) {
+    const rect = elt.getBoundingClientRect(), bodyElt = document.body;
+
+    return {
+      top: rect.top + bodyElt .scrollTop,
+      left: rect.left + bodyElt .scrollLeft
+    };
   }
 }

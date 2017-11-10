@@ -1,14 +1,14 @@
 <div class="wrapper" #wrapper>
-  <canvas #canvasCommon class="canvas-common"></canvas>
-  <canvas #canvasOverlay class="canvas-overlay"
+  <canvas #canvasCommon class="canvas-common" width="800" height="600"></canvas>
+  <canvas #canvasOverlay class="canvas-overlay" width="800" height="600"
           (mousedown)="overlayMouseDown($event)"
           (mousemove)="overlayMouseMove($event)"
           (mouseup)="overlayMouseUp($event)"></canvas>
 </div>
 
 <button (click)="clear()">Очистить</button>
-<button (click)="prev()">&lt;</button>
-<button (click)="next()">&gt;</button>
+<!--<button (click)="prev()">&lt;</button>-->
+<!--<button (click)="next()">&gt;</button>-->
 
 <input type="number" [(ngModel)]="brush.width"/>
 <input type="color" [(ngModel)]="brush.color"/>

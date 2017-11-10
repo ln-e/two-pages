@@ -3,7 +3,6 @@ Available rooms:
 <ul>
   <ng-container *ngIf="rooms">
     <li class="text" *ngFor="let room of rooms">
-      {{ room | json }}
       {{ room.name }} <button [routerLink]="['room', room.id]">go into</button>
     </li>
   </ng-container>
@@ -11,6 +10,6 @@ Available rooms:
 </ul>
 
 <form [formGroup]="newRoomForm">
-  <input formControlName="name"/>
+  <input formControlName="name" placeholder="Room's name"/>
   <button (click)="addRoom()">Add room</button>
 </form>

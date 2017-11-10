@@ -5,6 +5,14 @@ export class Curve {
   public brush: Brush;
   public points: Point[];
 
+  public static fromJson(data: string): Curve {
+    const object = JSON.parse(data);
+    const curve = new Curve(new Brush(object.brush.width, object.brush.color, object.brush.opacity));
+    curve.points = object.points.map((pointData: string) => Point.fromJson(pointData));
+
+    return curve;
+  }
+
   constructor(brush: Brush) {
     this.brush = brush;
     this.points = [];
@@ -33,5 +41,12 @@ export class Curve {
         i--; // еще раз проверяем начиная с этой же точки
       }
     }
+  }
+
+  public toJson() {
+    return JSON.stringify({
+      brush: this.brush,
+      points: this.points.map((point: Point) => point.toJson()),
+    });
   }
 }

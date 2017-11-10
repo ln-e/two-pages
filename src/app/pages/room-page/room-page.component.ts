@@ -1,5 +1,6 @@
 import { Component, OnInit } from '@angular/core';
-import { ActivatedRoute, Params } from '@angular/router';
+import { Location } from '@angular/common';
+import { ActivatedRoute, Params, Router } from '@angular/router';
 import { switchMap } from 'rxjs/operators';
 import { RoomService } from '../../core/services/room.service';
 import { Room } from '../../core/model/room';
@@ -12,10 +13,12 @@ import { Room } from '../../core/model/room';
 export class RoomPageComponent implements OnInit {
 
   public room: Room;
+  public link: string;
 
   constructor(
     private route: ActivatedRoute,
     private roomService: RoomService,
+    private location: Location,
   ) { }
 
   public ngOnInit() {
@@ -26,6 +29,7 @@ export class RoomPageComponent implements OnInit {
         }),
       )
       .subscribe((room: Room) => {
+        this.link = window.location.origin + '/room/' + room.id;
         this.room = room;
       });
   }

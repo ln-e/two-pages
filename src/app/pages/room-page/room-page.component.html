@@ -1,7 +1,9 @@
-<p>
-  room-page works!
+<a [routerLink]="['/']">Back to the list</a>
 
-  {{ room | json}}
+<div *ngIf="room">
+  <h1>{{ room.name }}</h1>
 
-  <app-graffity></app-graffity>
-</p>
+  Share this link with your friends <b><a [href]="link">{{ link }}</a></b>
+
+  <app-graffity [roomId]="room.id"></app-graffity>
+</div>

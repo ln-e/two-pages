@@ -1,3 +1,5 @@
+import { Point } from './point';
+
 export class Canvas {
 
   public root: HTMLCanvasElement;
@@ -36,9 +38,9 @@ export class Canvas {
     this.context.moveTo(points[0].x, points[0].y);
     this.context.lineTo(points[0].x - 0.5, points[0].y - 0.5);
 
-    for (let i in points) {
-      this.context.lineTo(points[i].x, points[i].y);
-    }
+    points.forEach((point: Point) => {
+      this.context.lineTo(point.x, point.y);
+    });
 
     this.context.stroke();
 

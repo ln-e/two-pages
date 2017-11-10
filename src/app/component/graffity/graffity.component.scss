@@ -1,5 +1,12 @@
 .wrapper {
+  height: 600px;
   position: relative;
+  width: 800px;
+
+  canvas {
+    height: 100%;
+    width: 100%;
+  }
 }
 
 .canvas-overlay {
